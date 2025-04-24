@@ -25,10 +25,15 @@ const Profile = () => {
         return res.data;
       }),
   });
-  const handleFollow = () => {
-    
-  }
-//   console.log(data);
+  const { isLoading: rIsLoading, data: relationshipData } = useQuery({
+    queryKey: ["relationship"],
+    queryFn: () =>
+      makeRequest.get("/relationships?followedUserId=" + userId).then((res) => {
+        return res.data;
+      }),
+  });
+  const handleFollow = () => {};
+  //   console.log(data);
   return (
     <div className="profile">
       {isLoading ? (
@@ -74,10 +79,16 @@ const Profile = () => {
                     <span>{data.website}</span>
                   </div>
                 </div>
-                {userId === currentUser.id ? (
+                {rIsLoading ? (
+                  "Loading..."
+                ) : userId === currentUser.id ? (
                   <button>update</button>
                 ) : (
-                  <button onClick={handleFollow}>follow</button>
+                  <button onClick={handleFollow}>
+                    {relationshipData.includes(currentUser.id)
+                      ? "Following"
+                      : "Follow"}
+                  </button>
                 )}
               </div>
               <div className="right">
