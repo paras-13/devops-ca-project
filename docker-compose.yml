@@ -32,15 +32,9 @@ services:
       - DB_USER=root
       - DB_PASSWORD=Paras13@mysql
       - DB_NAME=social
-    command: [
-        # "./wait-for-it.sh",
-        # "db:3306",
-        # "--timeout=30",
-        # "--strict",
-        # "--",
-        "node",
-        "index.js",
-      ]
+    env_file:
+      - ./api/.env # <-- Yeh line add kari hai bhai
+    command: ["node", "index.js"]
 
   db:
     image: mysql:latest
