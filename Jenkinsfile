@@ -40,6 +40,11 @@ pipeline {
                 '''
             }
         }
+        stage('Fix Permissions') {
+            steps {
+                bat 'chmod +x ./api/wait-for-it.sh'  // Ensure correct permissions in Jenkins
+            }
+        }
         stage('Build') {
             steps {
                 bat 'docker-compose build'
