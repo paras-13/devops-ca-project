@@ -21,7 +21,6 @@
 // }
 pipeline {
     agent any
-
     stages {
         stage('Checkout') {
             steps {
@@ -30,7 +29,13 @@ pipeline {
         }
         stage('Convert Line Endings') {
             steps {
-                bat 'find . -name "wait-for-it.sh" -print0 | xargs -0 -n 1 dos2unix'
+                powershell '''
+                    Get-ChildItem . -Recurse -Filter "wait-for-it.sh" | ForEach-Object {
+                        $content = Get-Content $_.FullName
+                        $content = $content -replace "\`r", ""
+                        Set-Content $_.FullName -Value $content -Encoding UTF8
+                    }
+                '''
             }
         }
         stage('Build') {
@@ -45,3 +50,4 @@ pipeline {
         }
     }
 }
+
