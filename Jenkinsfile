@@ -29,18 +29,18 @@ pipeline {
             }
         }
         stage('Fix Line Endings') {
-            steps {
-                powershell '''
-                    # This will recursively search for all .sh files and fix the line endings
-                    Get-ChildItem -Recurse -Filter *.sh | ForEach-Object {
-                        # Replace Windows line endings (\r\n) with Unix line endings (\n)
-                        $content = Get-Content $_.FullName
-                        $content = $content -replace "`r", ""  # Remove carriage return characters
-                        Set-Content $_.FullName -Value $content -Encoding UTF8
-                    }
-                '''
+    steps {
+        powershell '''
+            # This will recursively search for all .sh files and fix the line endings
+            Get-ChildItem -Recurse -Filter *.sh | ForEach-Object {
+                # Replace Windows line endings (\r\n) with Unix line endings (\n)
+                $content = Get-Content $_.FullName
+                $content = $content -replace "`r", ""  # Remove carriage return characters
+                Set-Content $_.FullName -Value $content -Encoding UTF8
             }
-        }
+        '''
+    }
+}
         stage('Set Executable Permissions') {
             steps {
                 powershell '''
