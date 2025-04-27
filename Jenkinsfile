@@ -32,7 +32,7 @@ pipeline {
                 powershell '''
                     Get-ChildItem . -Recurse -Filter "wait-for-it.sh" | ForEach-Object {
                         $content = Get-Content $_.FullName
-                        $content = $content -replace "\`r", ""
+                        $content = $content -replace "`r", ""
                         Set-Content $_.FullName -Value $content -Encoding UTF8
                     }
                 '''
@@ -50,4 +50,5 @@ pipeline {
         }
     }
 }
+
 
