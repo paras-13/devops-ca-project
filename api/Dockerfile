@@ -28,8 +28,8 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the wait-for-it script and convert its line endings to Unix format
-COPY wait-for-it.sh .
-RUN dos2unix wait-for-it.sh && chmod +x wait-for-it.sh
+# COPY wait-for-it.sh .
+# RUN dos2unix wait-for-it.sh && chmod +x wait-for-it.sh
 
 COPY . ./
 
