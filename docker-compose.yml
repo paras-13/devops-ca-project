@@ -34,10 +34,10 @@ services:
       - DB_NAME=social
     command: [
         # "./wait-for-it.sh",
-        "db:3306",
-        "--timeout=30",
-        "--strict",
-        "--",
+        # "db:3306",
+        # "--timeout=30",
+        # "--strict",
+        # "--",
         "node",
         "index.js",
       ]
