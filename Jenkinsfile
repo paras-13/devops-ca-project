@@ -42,7 +42,8 @@ pipeline {
         }
         stage('Fix Permissions') {
             steps {
-                bat 'chmod +x ./api/wait-for-it.sh'  // Ensure correct permissions in Jenkins
+                // Using Git Bash to run chmod
+                bat '"C:\\Program Files\\Git\\bin\\bash.exe" -c "chmod +x ./api/wait-for-it.sh"'
             }
         }
         stage('Build') {
@@ -57,6 +58,7 @@ pipeline {
         }
     }
 }
+
 
 
 
