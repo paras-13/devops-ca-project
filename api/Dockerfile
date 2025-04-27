@@ -26,13 +26,13 @@ COPY wait-for-it.sh .
 
 # Fix line endings to avoid issues with Windows-style line endings
 RUN sed -i 's/\r$//' wait-for-it.sh
-RUN chmod +x wait-for-it.sh
 
 # Debugging: Print out the content of wait-for-it.sh to ensure it's correct
-RUN cat -v wait-for-it.sh  # This will display any \r characters
+RUN cat -v wait-for-it.sh  # This will display any \r characters if they still exist
 
 COPY . ./
 
 EXPOSE 8800
 
 CMD ["npm", "start"]
+
