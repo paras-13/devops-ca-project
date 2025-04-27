@@ -1,69 +1,3 @@
-# version: "3.8"
-
-# services:
-#   web:
-#     build: ./frontend
-#     ports:
-#       - "5173:5173"
-#     networks:
-#       - social-network
-#     environment:
-#       - VITE_API_BASE_URL=http://localhost:8800/api
-#     volumes:
-#       - shared-uploads:/app/public/uploads
-#       - ./frontend:/app
-#       - /app/node_modules
-#     stdin_open: true
-#     tty: true
-
-#   api:
-#     build: ./api
-#     ports:
-#       - "8800:8800"
-#     depends_on:
-#       - db
-#     networks:
-#       - social-network
-#     volumes:
-#       - shared-uploads:/api/upload
-#       - ./api:/app
-#     environment:
-#       - DB_HOST=db
-#       - DB_USER=root
-#       - DB_PASSWORD=Paras13@mysql
-#       - DB_NAME=social
-#     command:
-#       [
-#         "bash",
-#         "./wait-for-it.sh",
-#         "db:3306",
-#         "--timeout=30",
-#         "--strict",
-#         "--",
-#         "node",
-#         "index.js",
-#       ]
-
-#   db:
-#     image: mysql:latest
-#     ports:
-#       - "3306:3306"
-#     volumes:
-#       - socialapp:/var/lib/mysql
-#     environment:
-#       MYSQL_ROOT_PASSWORD: Paras13@mysql
-#       MYSQL_DATABASE: social
-#     networks:
-#       - social-network
-
-# networks:
-#   social-network:
-#     driver: bridge
-
-# volumes:
-#   shared-uploads:
-#   socialapp:
-
 version: "3.8"
 
 services:
@@ -92,7 +26,7 @@ services:
       - social-network
     volumes:
       - shared-uploads:/api/upload
-      - ./api:/api
+      - ./api:/app
     environment:
       - DB_HOST=db
       - DB_USER=root
