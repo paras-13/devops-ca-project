@@ -26,8 +26,6 @@ COPY wait-for-it.sh .
 
 # Fix line endings to avoid issues with Windows-style line endings
 RUN sed -i 's/\r$//' wait-for-it.sh
-
-# Ensure that the script has executable permissions
 RUN chmod +x wait-for-it.sh
 
 # Debugging: Print out the content of wait-for-it.sh to ensure it's correct
