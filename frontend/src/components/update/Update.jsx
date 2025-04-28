@@ -14,7 +14,7 @@ const Update = ({ setOpenUpdate, user }) => {
   const handleChange = (e) => {
     setTexts((prev) => ({
       ...prev,
-      [e.target.name]: [e.target.value],
+      [e.target.name]: e.target.value,
     }));
   };
 
