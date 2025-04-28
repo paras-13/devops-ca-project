@@ -28,7 +28,7 @@ export const updateUser = async (req, res) => {
       return res.status(403).json("Token is not valid");
     }
     const query =
-      "UPDATE users SET `name`=?, `city`=?, `website`=? `coverPic`=?, `profilePic`=? WHERE id=?";
+      "UPDATE users SET `name`=?, `city`=?, `website`=?, `coverPic`=?, `profilePic`=? WHERE id=?";
     const values = [
       req.body.name,
       req.body.city,
