@@ -32,7 +32,22 @@ const Profile = () => {
         return res.data;
       }),
   });
-  const handleFollow = () => {};
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (following) => {
+      if (following)
+        return makeRequest.delete("/relationships?userId=" + userId);
+      return makeRequest.post("/likes", { userId });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["relationship"]);
+    },
+  });
+  const handleFollow = () => {
+    mutation.mutate(relationshipData.includes(currentUser.id));
+  };
   //   console.log(data);
   return (
     <div className="profile">

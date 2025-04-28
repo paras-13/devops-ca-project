@@ -29,11 +29,12 @@ export const addRelationship = async (req, res) => {
       return res.status(403).json("Token is not valid");
     }
 
-    const query = "INSERT INTO likes (`userId`, `postId`) VALUES (?, ?)";
-    const values = [userInfo.id, req.body.postId];
+    const query =
+      "INSERT INTO relationships (`followerUserId`, `followedUserId`) VALUES (?, ?)";
+    const values = [userInfo.id, req.body.userId];
 
     await db.execute(query, values);
-    return res.status(200).json("Post has been liked");
+    return res.status(200).json("Following");
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -51,11 +52,12 @@ export const deleteRelationship = async (req, res) => {
       return res.status(403).json("Token is not valid");
     }
 
-    const query = "DELETE FROM likes WHERE `userId` = ? AND `postId` = ?";
-    const values = [userInfo.id, req.query.postId];
+    const query =
+      "DELETE FROM relationships WHERE `followerUserId` = ? AND `followedUserId` = ?";
+    const values = [userInfo.id, req.query.userId];
 
     await db.execute(query, values);
-    return res.status(200).json("Post has been unliked");
+    return res.status(200).json("UnFollow");
   } catch (err) {
     return res.status(500).json(err);
   }
