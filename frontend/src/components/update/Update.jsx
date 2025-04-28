@@ -3,6 +3,7 @@ import "./update.scss";
 import { makeRequest } from "../../axios";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 const Update = ({ setOpenUpdate, user }) => {
   const [cover, setCover] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -10,7 +11,10 @@ const Update = ({ setOpenUpdate, user }) => {
     name: "",
     city: "",
     website: "",
+    email: "",
+    password: "",
   });
+
   const handleChange = (e) => {
     setTexts((prev) => ({
       ...prev,
@@ -28,6 +32,7 @@ const Update = ({ setOpenUpdate, user }) => {
       queryClient.invalidateQueries(["user"]);
     },
   });
+
   const upload = async (file) => {
     try {
       const formData = new FormData();
@@ -40,17 +45,36 @@ const Update = ({ setOpenUpdate, user }) => {
       console.log("Error uploading image:", err);
     }
   };
+
   const handleClick = async (e) => {
     e.preventDefault();
-    let coverUrl;
-    let profileUrl;
 
-    coverUrl = cover ? await upload(cover) : user.coverPic;
-    profileUrl = profile ? await upload(profile) : user.profilePic;
+    let coverUrl = cover ? await upload(cover) : user.coverPic;
+    let profileUrl = profile ? await upload(profile) : user.profilePic;
 
-    mutation.mutate({ ...texts, coverPic: coverUrl, profilePic: profileUrl });
+    const updatedData = {
+      coverPic: coverUrl,
+      profilePic: profileUrl,
+    };
+
+    if (texts.name.trim() !== "") updatedData.name = texts.name;
+    else updatedData.name = user.name;
+
+    if (texts.city.trim() !== "") updatedData.city = texts.city;
+    else updatedData.city = user.city;
+
+    if (texts.website.trim() !== "") updatedData.website = texts.website;
+    else updatedData.website = user.website;
+
+    if (texts.email && texts.email.trim() !== "")
+      updatedData.email = texts.email;
+    if (texts.password && texts.password.trim() !== "")
+      updatedData.password = texts.password;
+
+    mutation.mutate(updatedData);
     setOpenUpdate(false);
   };
+
   return (
     <div className="update">
       <div className="wrapper">
@@ -77,6 +101,7 @@ const Update = ({ setOpenUpdate, user }) => {
               style={{ display: "none" }}
               onChange={(e) => setCover(e.target.files[0])}
             />
+
             <label htmlFor="profile">
               <span>Profile Picture</span>
               <div className="imgContainer">
@@ -98,6 +123,7 @@ const Update = ({ setOpenUpdate, user }) => {
               onChange={(e) => setProfile(e.target.files[0])}
             />
           </div>
+
           <label>Email</label>
           <input
             type="text"
@@ -105,6 +131,7 @@ const Update = ({ setOpenUpdate, user }) => {
             name="email"
             onChange={handleChange}
           />
+
           <label>Password</label>
           <input
             type="text"
@@ -112,6 +139,7 @@ const Update = ({ setOpenUpdate, user }) => {
             name="password"
             onChange={handleChange}
           />
+
           <label>Name</label>
           <input
             type="text"
@@ -119,6 +147,7 @@ const Update = ({ setOpenUpdate, user }) => {
             name="name"
             onChange={handleChange}
           />
+
           <label>Country / City</label>
           <input
             type="text"
@@ -126,6 +155,7 @@ const Update = ({ setOpenUpdate, user }) => {
             value={texts.city}
             onChange={handleChange}
           />
+
           <label>Website</label>
           <input
             type="text"
@@ -133,8 +163,10 @@ const Update = ({ setOpenUpdate, user }) => {
             value={texts.website}
             onChange={handleChange}
           />
+
           <button onClick={handleClick}>Update</button>
         </form>
+
         <button className="close" onClick={() => setOpenUpdate(false)}>
           close
         </button>
