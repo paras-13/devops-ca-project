@@ -3,15 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import "./posts.scss";
 import { makeRequest } from "../../axios";
 
-const Posts = () => {
+const Posts = ({ userId }) => {
   const { isPending, error, data } = useQuery({
     queryKey: ["posts"],
     queryFn: () =>
-      makeRequest.get("/posts").then((res) => {
+      makeRequest.get("/posts?userId=" + userId).then((res) => {
         return res.data;
       }),
   });
-  // console.log(data);
+  console.log(data);
   //   if (isPending) return <div>Loading...</div>;
   //   if (error) return <div>Error fetching posts</div>;
 

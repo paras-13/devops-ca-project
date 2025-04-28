@@ -13,11 +13,15 @@ import { makeRequest } from "../../axios";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import Update from "../../components/update/Update";
 
 const Profile = () => {
+  const [openUpdate, setOpenUpdate] = useState(false);
   const { currentUser } = useContext(AuthContext);
+
   const userId = parseInt(useLocation().pathname.split("/")[2]);
+
   const { isLoading, error, data } = useQuery({
     queryKey: ["user"],
     queryFn: () =>
@@ -25,6 +29,7 @@ const Profile = () => {
         return res.data;
       }),
   });
+
   const { isLoading: rIsLoading, data: relationshipData } = useQuery({
     queryKey: ["relationship"],
     queryFn: () =>
@@ -48,6 +53,7 @@ const Profile = () => {
   const handleFollow = () => {
     mutation.mutate(relationshipData.includes(currentUser.id));
   };
+
   //   console.log(data);
   return (
     <div className="profile">
@@ -56,9 +62,13 @@ const Profile = () => {
       ) : (
         <>
           <div className="images">
-            <img src={data.coverPic} alt="Cover Picture" className="cover" />
             <img
-              src={data.profilePic}
+              src={"/uploads/" + data.coverPic}
+              alt="Cover Picture"
+              className="cover"
+            />
+            <img
+              src={"/uploads/" + data.profilePic}
               alt="Profile Picture"
               className="profilePic"
             />
@@ -97,7 +107,7 @@ const Profile = () => {
                 {rIsLoading ? (
                   "Loading..."
                 ) : userId === currentUser.id ? (
-                  <button>update</button>
+                  <button onClick={() => setOpenUpdate(true)}>Update</button>
                 ) : (
                   <button onClick={handleFollow}>
                     {relationshipData.includes(currentUser.id)
@@ -111,10 +121,11 @@ const Profile = () => {
                 <MoreVertIcon />
               </div>
             </div>
-            <Posts />
+            <Posts userId={userId} />
           </div>
         </>
       )}
+      {openUpdate && <Update setOpenUpdate={setOpenUpdate} user={data} />}
     </div>
   );
 };
