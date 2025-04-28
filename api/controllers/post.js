@@ -7,6 +7,13 @@ dotenv.config();
 
 export const getPosts = async (req, res) => {
   try {
+    const userId =
+      !req.query.userId ||
+      req.query.userId === "undefined" ||
+      req.query.userId === "null"
+        ? null
+        : req.query.userId;
+
     const token = req.cookies.accessToken;
     if (!token) return res.status(401).json("Not logged in!");
 
@@ -18,16 +25,22 @@ export const getPosts = async (req, res) => {
       return res.status(403).json("Token is not valid");
     }
 
-    const query = `
+    const query = userId
+      ? `SELECT p.*, u.id as userId, name, profilePic 
+      FROM posts AS p 
+      JOIN users AS u ON (u.id = p.userId) 
+      WHERE p.userId = ? ORDER BY p.createdAt DESC`
+      : `
       SELECT p.*, u.id as userId, name, profilePic 
       FROM posts AS p 
-      JOIN users AS u ON u.id = p.userId
+      JOIN users AS u ON (u.id = p.userId)
       LEFT JOIN relationships AS r ON p.userId = r.followedUserId 
       WHERE r.followerUserId = ? OR p.userId = ? 
       ORDER BY p.createdAt DESC
     `;
 
-    const [data] = await db.execute(query, [userInfo.id, userInfo.id]);
+    const values = userId ? [userId] : [userInfo.id, userInfo.id];
+    const [data] = await db.execute(query, values);
     return res.status(200).json(data);
   } catch (err) {
     return res.status(500).json(err);
