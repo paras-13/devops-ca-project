@@ -39,7 +39,7 @@ const Profile = () => {
     mutationFn: (following) => {
       if (following)
         return makeRequest.delete("/relationships?userId=" + userId);
-      return makeRequest.post("/likes", { userId });
+      return makeRequest.post("/relationships", { userId });
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["relationship"]);
